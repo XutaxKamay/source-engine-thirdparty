@@ -1,0 +1,41 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Utils
+import os
+
+top = '.'
+PROJECT_NAME = 'ALP'
+
+def options(opt):
+	# stub
+	return
+
+def configure(conf):
+	conf.env.append_unique('CXXFLAGS', ['-std=c++17','-fpermissive'])
+
+def build(bld):
+    includes = [
+        './include',
+        '../../public',
+        '../../public/tier0',
+    ]
+
+    source = [
+		'src/fastlanes_ffor.cpp',
+        'src/fastlanes_generated_ffor.cpp',
+        'src/fastlanes_generated_unffor.cpp',
+        'src/fastlanes_unffor.cpp',
+        'src/export_float_decompressor.cpp',
+	]
+
+    bld.stlib(
+		source   = source,
+        includes = includes,
+		target   = PROJECT_NAME,
+		name     = PROJECT_NAME,
+		features = 'c cxx',
+		subsystem = bld.env.MSVC_SUBSYSTEM,
+		idx      = bld.get_taskgen_count()
+	)
+
